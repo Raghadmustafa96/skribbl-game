@@ -14,50 +14,66 @@ app.use(cors());
 app.use(express.static("./public"));
 
 let currentRoom;
-const queue = {
-  tickets: [],
-  staff: [],
+const player = {};
+const player2 = {
+  count: [],
 };
-let link = uuidv4();
+
 app.get("/", (req, res) => {
-  res.render("index", { data: link });
+  res.render("index");
 });
 
-app.get("/" + link, (req, res) => {
+app.get("/game", (req, res) => {
   res.render("admin");
 });
 
 io.on("connection", (socket) => {
-  console.log("a user Connected", socket.id);
+  console.log("a server can see you", socket.id);
+
   socket.on("join", (payload) => {
-    currentRoom = payload.room;
-    socket.join(currentRoom);
-    console.log(currentRoom);
-    const data = { id: socket.id };
-    queue.staff.push(data);
+    // console.log(player.count.length);
+    // currentRoom = payload.room;
+    // socket.join(currentRoom);
+    // console.log(currentRoom);
+    // const data = { id: socket.id };
+    // player2.count.push(data);
+    // console.log(player2);
   });
-
-  socket.on("createTicket", (payload) => {
-    const data = { id: uuidv4(), ...payload };
-    queue.tickets.push(data);
-    socket.in(currentRoom).emit("newTicket", { ...data, socketId: socket.id }); // 3s
+  socket.on("all", () => {
+    Object.keys(player).forEach((players) => {
+      socket.emit("players", "what I am doing here");
+    });
   });
-
-  socket.on("getall", () => {
-    queue.staff.forEach((staff) => {
-      socket.emit("", { name: staff.name });
-    });
-    queue.tickets.forEach((ticket) => {
-      socket.emit("newTicket", ticket);
-    });
+  socket.on("createName", (payload) => {
+    const name = payload.name;
+    socket.emit("createName", name);
+    // io.emit(currentRoom).emit("newTicket", { name }); // 3s
+  });
+  socket.on("newPlayer", (payload) => {
+    console.log("new player is here");
+    player[socket.id] = payload;
+    console.log("players", Object.keys(player).length);
+    io.emit("playerJoin", player);
   });
   socket.on("disconnect", () => {
-    socket.to(currentRoom).emit("offlineStaff", { id: socket.id });
-    queue.staff = queue.staff.filter((s) => s.id !== socket.id);
+    delete player[socket.id];
+    console.log("players left", Object.keys(player).length);
+    io.emit("playerJoin", player);
   });
-});
 
-// console.log(link);
+  // socket.on("getall", () => {
+  //   player2.count.forEach((data) => {
+  //     socket.emit("", { name: data.name });
+  //   });
+  //   queue.tickets.forEach((ticket) => {
+  //     socket.emit("newTicket", ticket);
+  //   });
+  // });
+  // socket.on("disconnect", () => {
+  //   socket.to(currentRoom).emit("offlineStaff", { id: socket.id });
+  //   queue.staff = queue.staff.filter((s) => s.id !== socket.id);
+  // });
+});
 
 module.exports = {
   server,

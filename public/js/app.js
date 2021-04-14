@@ -1,29 +1,30 @@
 const options = {
-  transports: ['websocket'],
+  transports: ["websocket"],
 };
-const socket = io('localhost:3030/', options);
-const formEl = document.getElementById('questions-form');
+// const socket = io("localhost:3030/game", options);
+const formEl = document.getElementById("questions-form");
 
-formEl.addEventListener('submit', handleSubmit);
+formEl.addEventListener("submit", handleSubmit);
 
-socket.on('connect', () => {
-  //1 if the client connect!!
-  console.log('Connected!!');
-  socket.on('hello', (payload) => {
-    console.log('hello', payload.class);
-  });
-});
+// socket.on("connect", () => {
+//1 if the client connect!!
+// console.log("Connected!!");
 
-function handleSubmit(e) {
-  e.preventDefault();
-  const payload = {
-    question: e.target.question.value,
-  };
-  socket.emit('createTicket', payload);
-}
+// socket.on('hello', (payload) => {
+//   console.log('hello', payload.class);
+// });
+// });
+
+// function handleSubmit(e) {
+//   e.preventDefault();
+//   const payload = {
+//     question: e.target.question.value,
+//   };
+//   socket.emit("createTicket", payload);
+// }
 
 // const gameLink = document.getElementById('gameLink');
 //   gameLink.setAttribute("href", socket.id);
 
-  // const link =socket.id;
-  // console.log(link);
+// const link =socket.id;
+// console.log(link);
