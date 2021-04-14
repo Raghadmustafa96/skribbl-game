@@ -15,6 +15,20 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  background-color: #e6e9ff;
+}
+h2 {
+  padding-left: 20px;
+  font-size: 37px;
+}
+li {
+  list-style: none;
+  font-size: 30px;
+  padding-bottom: 15px;
+}
+h4 {
+  font-size: 22px;
+  padding-left: 26px;
 }
 
 /**
@@ -23,8 +37,8 @@ body {
 
 .whiteboard {
   border: 2px black solid;
-  height: 94%;
-  width: 50%;
+  height: 100%;
+  width: 100%;
 }
 
 .color {
@@ -48,3 +62,60 @@ body {
 .color.yellow {
   background-color: yellow;
 }
+.main {
+  display: grid;
+
+  grid-template-columns: 10% 15% 45% 20% 10%;
+  /* grid-template-rows: 20% 60% 20%; */
+}
+.player-list {
+  background-color: rgb(26, 105, 170);
+  grid-column-start: 2;
+  height: 85vh;
+  border-radius: 7px 0 0 7px;
+}
+.board {
+  background-color: white;
+}
+.chat {
+  background-color: rgb(26, 105, 170);
+  border-radius: 0 7px 7px 0;
+}
+.div-txtarea {
+  height: 725px;
+
+  /* background-color: aquamarine; */
+}
+.div-send-btn {
+  width: 100%;
+  height: 10%;
+}
+.txt {
+  width: 79%;
+  padding: 15px 0;
+  margin: 20px 0 10px 3%;
+  border-radius: 5px;
+}
+.btn {
+  width: 14%;
+  border-radius: 5px;
+  padding: 15px 0;
+  background-color: rgb(17, 36, 78);
+  color: white;
+}
+.txtArea {
+  margin: 3%;
+  width: 94%;
+  height: 100%;
+  border-radius: 5px;
+  background-color: #fff;
+  overflow: scroll;
+  padding: 5px;
+}
+/* .test {
+  width: 100%;
+  height: 1000px;
+  background-color: rgba(75, 109, 98, 0.335);
+  z-index: 2;
+  position: fixed;
+} */

@@ -3,18 +3,58 @@
   <head>
     <meta charset="UTF-8" />
     <title>Socket.IO whiteboard</title>
+    <!-- <link rel="stylesheet" href="./styles/style.css" /> -->
     <link rel="stylesheet" href="./styles/canvas.css" />
   </head>
   <body>
-    <canvas class="whiteboard"></canvas>
+    <main class="main">
+      <div class="test"></div>
 
-    <div class="colors">
-      <div class="color black"></div>
-      <div class="color red"></div>
-      <div class="color green"></div>
-      <div class="color blue"></div>
-      <div class="color yellow"></div>
-    </div>
+      <section class="player-list">
+        <div>
+          <h2>Room Number</h2>
+          <h4>Room number 2</h4>
+        </div>
+        <div>
+          <h2>Players</h2>
+          <ul>
+            <li>ibrahim</li>
+            <li>raghad</li>
+            <li>omar</li>
+            <li>ziad</li>
+            <li>ruba</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="board">
+        <canvas class="whiteboard"></canvas>
+
+        <div class="colors">
+          <div class="color black"></div>
+          <div class="color red"></div>
+          <div class="color green"></div>
+          <div class="color blue"></div>
+          <div class="color yellow"></div>
+        </div>
+      </section>
+
+      
+      <section class="chat">
+        
+        <div class="div-txtarea">
+          
+            <div class="txtArea"><div>lorem ipsum dolor sit amet, consectet</div></div>
+        </div>
+        <div class="div-send-btn">
+          <input type="text" class="txt">
+          <button class="btn">Send</button>
+        </div>
+      </section>
+      
+
+    </main>
+    
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="./js/main.js"></script>
