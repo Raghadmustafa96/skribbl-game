@@ -32,20 +32,21 @@ io.on("connection", (socket) => {
 
   socket.on("join", (payload) => {
     // console.log(player.count.length);
-    // currentRoom = payload.room;
-    // socket.join(currentRoom);
-    // console.log(currentRoom);
+    currentRoom = payload.room;
+    socket.join(currentRoom);
+    console.log(currentRoom);
     // const data = { id: socket.id };
     // player2.count.push(data);
     // console.log(player2);
   });
-  socket.on("all", () => {
-    Object.keys(player).forEach((players) => {
-      socket.emit("players", "what I am doing here");
-    });
-  });
+  // socket.on("all", () => {
+  //   Object.keys(player).forEach((players) => {
+  //     socket.emit("players", "what I am doing here");
+  //   });
+  // });
   socket.on("createName", (payload) => {
     const name = payload.name;
+    console.log(name, "-----------", currentRoom);
     socket.emit("createName", name);
     // io.emit(currentRoom).emit("newTicket", { name }); // 3s
   });

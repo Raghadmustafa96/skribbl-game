@@ -11,8 +11,8 @@ socket.on("connect", () => {
   socket.emit("join", { room: "lobby" });
 
   // listing to the newTicket event that was generated from the server
-  socket.emit("getall");
-  socket.emit("all");
+  // socket.emit("getall");
+  // socket.emit("all");
 
   socket.on("createName", (payload) => {
     //3a
