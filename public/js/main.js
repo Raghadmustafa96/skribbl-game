@@ -1,6 +1,9 @@
 'use strict';
 
-const socket = io();
+const options = {
+  transports: ['websocket'],
+};
+const socket = io('localhost:3000/', options);
 const chatForm = document.getElementById('chatForm');
 const { username, room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
@@ -12,7 +15,11 @@ socket.on('message', (message) => {
   console.log('__msg__', message);
   outputMessage(message);
 });
-
+// get Room and players
+socket.on('roomPlayers', ({ room, users }) => {
+  outputRoomName(room);
+  output(users);
+});
 // functoins
 function outputMessage(message) {
   const div = document.createElement('div');
@@ -25,6 +32,22 @@ function outputMessage(message) {
   para.innerText = message.text;
   div.appendChild(para);
   document.querySelector('.txtArea').appendChild(div);
+}
+
+function outputRoomName(room) {
+  let roomDiv = document.getElementById('rooms');
+  let h4 = document.createElement('h4');
+  h4.innerText = room;
+  roomDiv.appendChild(h4);
+}
+
+function output(users) {
+  let ul = document.getElementById('players');
+  users.forEach((user) => {
+    let li = document.createElement('li');
+    li.innerText = user.username;
+    ul.appendChild(li);
+  });
 }
 
 // events

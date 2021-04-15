@@ -19,19 +19,18 @@ const PORT = 3000 || process.env.PORT;
 // set Static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-function onConnection(socket) {
+function onConnection(socket, room) {
   socket.on('drawing', (data) => {
-    socket.emit('drawing', data);
+    socket.broadcast.to(room).emit('drawing', data);
   });
 }
 
 io.on('connection', (socket) => {
   socket.on('joinRoom', ({ username, room }) => {
     const user = userJoin(socket.id, username, room);
-
     socket.join(user.room);
-    // welcome current player
     onConnection(socket);
+    // welcome current player
     socket.emit(
       'message',
       formatMessage(skribbleBot, 'Welcome to Skribble Game')
@@ -43,12 +42,30 @@ io.on('connection', (socket) => {
         'message',
         formatMessage(skribbleBot, `${user.username} has joined the game`)
       );
+    // send players info
+    socket.to(user.room).emit('roomPlayers', {
+      room: user.room,
+      users: getRoomUsers(user.room),
+    });
   });
-  onConnection(socket);
+  onConnection(socket, 'room1');
   socket.on('chatMessage', (msg) => {
     const user = getCurrentUser(socket.id);
 
-    io.to(user.room).emit('message', formatMessage(user.username, msg));
+    socket.to(user.room).emit('message', formatMessage(user.username, msg));
+  });
+  socket.on('disconnect', () => {
+    const user = userLeave(socket.id);
+    if (user) {
+      io.to(user.room).emit(
+        'message',
+        formatMessage(skribbleBot, `${user.username} has left the Game`)
+      );
+      io.to(user.room).emit('roomPlayers', {
+        room: user.room,
+        users: getRoomUsers(user.room),
+      });
+    }
   });
 });
 server.listen(PORT, () => {
