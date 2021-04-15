@@ -36,9 +36,10 @@ h4 {
  */
 
 .whiteboard {
-  border: 2px black solid;
+  border: 2px solid #34568b;
   height: 100%;
   width: 100%;
+  border-radius: 5px;
 }
 
 .color {
@@ -72,7 +73,7 @@ h4 {
   background-color: #98b4d4;
   grid-column-start: 2;
 
-  border-radius: 7px 0 0 7px;
+  border-radius: 7px;
 }
 .board {
   background-color: white;
@@ -80,7 +81,7 @@ h4 {
 }
 .chat {
   background-color: #98b4d4;
-  border-radius: 0 7px 7px 0;
+  border-radius: 7px;
 }
 .div-txtarea {
   height: 88%;
