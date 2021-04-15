@@ -11,15 +11,31 @@ const { username, room } = Qs.parse(location.search, {
 
 // Join the Game
 socket.emit('joinRoom', { username, room });
+
+socket.emit('getall');
+
 socket.on('message', (message) => {
   console.log('__msg__', message);
   outputMessage(message);
 });
-// get Room and players
-socket.on('roomPlayers', ({ room, users }) => {
-  outputRoomName(room);
-  output(users);
+
+socket.on('room', (data) => {
+  outputRoomName(data.room);
 });
+
+
+// get Room and players
+socket.on('roomPlayers', (data) => {
+  console.log(data , '__data');
+  output(data);
+});
+
+
+socket.on('offlineStaff', (payload) => {
+  const el = document.getElementById(payload.id);
+  el.remove();
+});
+
 // functoins
 function outputMessage(message) {
   const div = document.createElement('div');
@@ -41,13 +57,13 @@ function outputRoomName(room) {
   roomDiv.appendChild(h4);
 }
 
-function output(users) {
+function output(user) {
   let ul = document.getElementById('players');
-  users.forEach((user) => {
     let li = document.createElement('li');
-    li.innerText = user.username;
+    li.id = user.id;
+    li.innerText = user.name;
+    console.log('__Nmae', user.name);
     ul.appendChild(li);
-  });
 }
 
 // events
