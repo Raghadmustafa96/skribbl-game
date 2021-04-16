@@ -1,5 +1,5 @@
 {
-  "words": [
+  "wordsArr": [
     "world",
     "tea",
     "mochi",
@@ -478,3 +478,4 @@
     "bun"
   ]
 }
+

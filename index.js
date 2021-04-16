@@ -16,16 +16,17 @@ const {
 
 const queue = {
   staff: [],
+  words: [],
 };
 
 let players = [];
 let current_turn = 0;
 let timeOut;
 let _turn = 0;
-const MAX_WAITING = 10000;
+const MAX_WAITING = 20000;
 
 const skribbleBot = 'Skribble Bot';
-const PORT = 3030 || process.env.PORT;
+const PORT = 3000 || process.env.PORT;
 // set Static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -40,21 +41,21 @@ io.on('connection', (socket) => {
 
   players.push(socket);
 
-  socket.on('pass_turn',function(){
-    console.log('........................................................' );
-    if(players[_turn] == socket){
+  socket.on('pass_turn', function () {
+    console.log('........................................................');
+    if (players[_turn] == socket) {
       console.log('........................................................ turn ');
-       resetTimeOut();
-       next_turn();
+      resetTimeOut();
+      next_turn();
     }
   })
 
 
   socket.on('joinRoom', ({ username, room }) => {
-    const user = userJoin(socket.id, username, room);
+    const user = userJoin(socket.id, username, room, 0);
     socket.join(user.room);
 
-    const data = { name: username,room: user.room, id: socket.id };
+    const data = { name: username, room: user.room, id: socket.id };
     queue.staff.push(data);
 
     onConnection(socket);
@@ -77,18 +78,29 @@ io.on('connection', (socket) => {
     socket.on('getall', () => {
       console.log(queue);
       queue.staff.forEach((staff) => {
-        socket.emit('roomPlayers', {name : staff.name , room : staff.room , id : staff.id});
+        socket.emit('roomPlayers', { name: staff.name, room: staff.room, id: staff.id });
       });
     });
 
   });
 
+  socket.on('word', (data) => {
+    const user = getCurrentUser(socket.id);
+    console.log('OUR DATAAA', data);
+    queue.words.push(data);
+  })
   onConnection(socket, 'room1');
   socket.on('chatMessage', (msg) => {
     const user = getCurrentUser(socket.id);
 
-    socket.to(user.room).emit('message', formatMessage(user.username, msg));
+    io.in(user.room).emit('message', formatMessage(user.username, msg, queue.words[0]));
+    let score = formatMessage(user.username, msg, queue.words[0]).score
+    if (score){
+      socket.emit('score',{score:score , user:user})
+    }
+      queue.words.pop()
   });
+
 
   socket.on('disconnect', () => {
     socket.to('room1').emit('offlineStaff', { id: socket.id });
@@ -96,13 +108,13 @@ io.on('connection', (socket) => {
     const user = userLeave(socket.id);
 
     queue.staff = queue.staff.filter((s) => s.id !== socket.id);
-    console.log(' queue.staff' ,  queue.staff );
+    console.log(' queue.staff', queue.staff);
 
 
     console.log('A player disconnected');
-    players.splice(players.indexOf(socket),1);
+    players.splice(players.indexOf(socket), 1);
     _turn--;
-    console.log("A number of players now ",players.length);
+    console.log("A number of players now ", players.length);
 
     if (user) {
       io.to(user.room).emit(
@@ -114,37 +126,37 @@ io.on('connection', (socket) => {
 });
 
 
-function next_turn(){
+function next_turn() {
   console.log('........................................................ * ');
 
-   _turn = current_turn++ % players.length;
-   players[_turn].emit('start turn','A player connected');
-   console.log('........................................................ ** ');
+  _turn = current_turn++ % players.length;
+  players[_turn].emit('start turn', 'A player connected');
+  console.log('........................................................ ** ');
 
-   console.log("next turn triggered " , _turn);
-   triggerTimeout();
-   players[_turn].emit('end turn','A player connected');
+  console.log("next turn triggered ", _turn);
+  triggerTimeout();
+  players[_turn].emit('end turn', 'A player connected');
 
-   console.log('........................................................ *** ');
+  console.log('........................................................ *** ');
 
 }
 
 
-function triggerTimeout(){
+function triggerTimeout() {
   _turn = current_turn++ % players.length;
   console.log('........................................................ triger ');
 
-  timeOut = setTimeout(()=>{
+  timeOut = setTimeout(() => {
     next_turn();
-  },MAX_WAITING);
+  }, MAX_WAITING);
 }
 
 
-function resetTimeOut(){
-   if(typeof timeOut === 'object'){
-     console.log("timeout reset");
-     clearTimeout(timeOut);
-   }
+function resetTimeOut() {
+  if (typeof timeOut === 'object') {
+    console.log("timeout reset");
+    clearTimeout(timeOut);
+  }
 }
 
 
