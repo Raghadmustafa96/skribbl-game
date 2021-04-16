@@ -20,6 +20,7 @@ socket.on('message', (message) => {
 });
 
 socket.on('room', (data) => {
+  console.log('room number' , room);
   outputRoomName(data.room);
 });
 
@@ -29,7 +30,6 @@ socket.on('roomPlayers', (data) => {
   console.log(data , '__data');
   output(data);
 });
-
 
 socket.on('offlineStaff', (payload) => {
   const el = document.getElementById(payload.id);
@@ -54,6 +54,7 @@ function outputRoomName(room) {
   let roomDiv = document.getElementById('rooms');
   let h4 = document.createElement('h4');
   h4.innerText = room;
+  console.log('room number' , room);
   roomDiv.appendChild(h4);
 }
 
@@ -62,7 +63,7 @@ function output(user) {
     let li = document.createElement('li');
     li.id = user.id;
     li.innerText = user.name;
-    console.log('__Nmae', user.name);
+    console.log('__Name', user.name);
     ul.appendChild(li);
 }
 
