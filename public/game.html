@@ -18,7 +18,12 @@
           <h2>Players</h2>
           <ul id="players"></ul>
         </div>
+        <button hidden type="button" id="word" name="word">word</button>
+
       </section>
+
+
+
       <iframe
         src="canvas.html"
         width="100%"
@@ -69,12 +74,17 @@
           </form>
         </div>
       </section>
+
+      <button type="button" id="turn" name="button">Next Turn</button>
+        
     </main>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js"
       integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4="
       crossorigin="anonymous"
     ></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="./js/main.js"></script>
   </body>

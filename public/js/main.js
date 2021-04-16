@@ -3,7 +3,7 @@
 const options = {
   transports: ['websocket'],
 };
-const socket = io('localhost:3000/', options);
+const socket = io('localhost:3030/', options);
 const chatForm = document.getElementById('chatForm');
 const { username, room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
@@ -22,6 +22,26 @@ socket.on('message', (message) => {
 socket.on('room', (data) => {
   outputRoomName(data.room);
 });
+
+
+
+
+$("#turn").on("click",function(e){
+    socket.emit('pass_turn');
+})
+
+socket.on('start turn', (data) => {
+console.log(data , 'start turn')
+  $('#word').removeAttr('hidden');
+
+});
+
+socket.on('end turn', (data) => {
+  console.log(data , 'end turn')
+  // $("#word").prop('hidden', 'hidden');
+  });
+
+
 
 
 // get Room and players
