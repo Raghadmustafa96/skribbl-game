@@ -18,8 +18,14 @@ const queue = {
   staff: [],
 };
 
+let players = [];
+let current_turn = 0;
+let timeOut;
+let _turn = 0;
+const MAX_WAITING = 10000;
+
 const skribbleBot = 'Skribble Bot';
-const PORT = 3000 || process.env.PORT;
+const PORT = 3030 || process.env.PORT;
 // set Static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -30,6 +36,20 @@ function onConnection(socket, room) {
 }
 
 io.on('connection', (socket) => {
+  console.log('A player connected');
+
+  players.push(socket);
+
+  socket.on('pass_turn',function(){
+    console.log('........................................................' );
+    if(players[_turn] == socket){
+      console.log('........................................................ turn ');
+       resetTimeOut();
+       next_turn();
+    }
+  })
+
+
   socket.on('joinRoom', ({ username, room }) => {
     const user = userJoin(socket.id, username, room);
     socket.join(user.room);
@@ -78,6 +98,12 @@ io.on('connection', (socket) => {
     queue.staff = queue.staff.filter((s) => s.id !== socket.id);
     console.log(' queue.staff' ,  queue.staff );
 
+
+    console.log('A player disconnected');
+    players.splice(players.indexOf(socket),1);
+    _turn--;
+    console.log("A number of players now ",players.length);
+
     if (user) {
       io.to(user.room).emit(
         'message',
@@ -86,6 +112,41 @@ io.on('connection', (socket) => {
     }
   });
 });
+
+
+function next_turn(){
+  console.log('........................................................ * ');
+
+   _turn = current_turn++ % players.length;
+   players[_turn].emit('start turn','A player connected');
+   console.log('........................................................ ** ');
+
+   console.log("next turn triggered " , _turn);
+   triggerTimeout();
+   players[_turn].emit('end turn','A player connected');
+
+   console.log('........................................................ *** ');
+
+}
+
+
+function triggerTimeout(){
+  _turn = current_turn++ % players.length;
+  console.log('........................................................ triger ');
+
+  timeOut = setTimeout(()=>{
+    next_turn();
+  },MAX_WAITING);
+}
+
+
+function resetTimeOut(){
+   if(typeof timeOut === 'object'){
+     console.log("timeout reset");
+     clearTimeout(timeOut);
+   }
+}
+
 
 server.listen(PORT, () => {
   console.log('server is running or PORT: ', PORT);
