@@ -133,6 +133,7 @@ a {
   padding: 5px;
   height: 40px;
   flex: 1;
+  font-size: 25px;
 }
 
 /* Join Page */
@@ -153,6 +154,7 @@ a {
 .join-main {
   padding: 30px 40px;
   /* background: var(--dark-color-b); */
+  border:5px solid white
 }
 
 .join-main p {
@@ -174,6 +176,8 @@ a {
   padding: 5px;
   height: 40px;
   width: 100%;
+  font-size: 25px;
+
 }
 
 .join-main select {
