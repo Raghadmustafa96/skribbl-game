@@ -17,7 +17,9 @@
 body {
   font-family: "Roboto", sans-serif;
   font-size: 16px;
-  background: var(--light-color);
+  background: url(../imgs/imag.gif);
+  background-repeat: no-repeat;
+  /* background-size: cover; */
   margin: 20px;
 }
 
@@ -128,22 +130,33 @@ a {
 
 /* Join Page */
 .join-container {
-  max-width: 500px;
+  max-width: 450px;
   margin: 80px auto;
   color: #fff;
+  margin-top: 17%;
+  margin-left: 57%;
+  border-radius: 20px;
+  -webkit-box-shadow: 0 10px 6px -6px #777;
+  -moz-box-shadow: 0 10px 6px -6px #777;
+  box-shadow: 0 20px 6px -6px #777;
+  
+  
 }
 
 .join-header {
   text-align: center;
   padding: 20px;
-  background: var(--dark-color-a);
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  background: linear-gradient(90deg,  rgba(164,196,204,1)   0%, rgb(2, 1, 22) 62%);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+
 }
 
 .join-main {
   padding: 30px 40px;
-  background: var(--dark-color-b);
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background: linear-gradient(90deg,  rgba(164,196,204,1)   0%, rgb(2, 1, 22) 62%);
 }
 
 .join-main p {
@@ -185,5 +198,68 @@ a {
 
   .chat-sidebar {
     display: none;
+  }
+}
+
+.container {
+  padding: 1vw;
+  position: absolute;
+  top: 15%;
+  left: 71%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  /* display: inline; */
+}
+.pen{
+  width: 190px;
+  float: right;
+  /* top: 10%; */
+  margin-top: -15%;
+}
+
+.background-color p {
+  color: #000;
+  font-family: 'Dancing Script', cursive;
+  font-size: 4vw;
+  font-weight: bold;
+  letter-spacing: 1vw;
+  max-width: 700px;
+  text-align: center;
+  background: rgba(255, 253, 160, 1);
+  background: -webkit-linear-gradient( left, #00ffff 0%, rgb(2, 1, 22) 25%, #97b1fb 50%, #00ffff 100%) repeat;
+  -webkit-background-clip: text;
+  -ms-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -ms-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  text-fill-color: transparent;
+  -webkit-animation-name: masked-animation;
+  -webkit-animation-duration: 50s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+}
+
+.background-color .enjoy{
+  font-size: 2vw;
+}
+.container1{
+  padding: 1vw;
+  position: absolute;
+  /* top: 15%;
+  left: 70%; */
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  top: 87%;
+  left: 25%;
+}
+
+@-webkit-keyframes masked-animation {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -8000px -3000px;
   }
 }
