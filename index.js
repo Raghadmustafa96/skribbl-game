@@ -6,16 +6,160 @@ const http = require('http');
 const app = express();
 const server = http.createServer(app);
 const io = require('socket.io')(server);
+const formatMessage = require('./utils/messages');
+const {
+  userJoin,
+  getCurrentUser,
+  userLeave,
+  getRoomUsers,
+} = require('./utils/users');
 
+const queue = {
+  staff: [],
+  words: [],
+};
+
+let players = [];
+let current_turn = 0;
+let timeOut;
+let _turn = 0;
+const MAX_WAITING = 20000;
+
+const skribbleBot = 'Skribble Bot';
 const PORT = 3000 || process.env.PORT;
 // set Static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-function onConnection(socket) {
-  socket.on('drawing', (data) => socket.broadcast.emit('drawing', data));
+function onConnection(socket, room) {
+  socket.on('drawing', (data) => {
+    socket.broadcast.to(room).emit('drawing', data);
+  });
 }
 
-io.on('connection', onConnection);
+io.on('connection', (socket) => {
+  console.log('A player connected');
+
+  players.push(socket);
+
+  socket.on('pass_turn', function () {
+    console.log('........................................................');
+    if (players[_turn] == socket) {
+      console.log('........................................................ turn ');
+      resetTimeOut();
+      next_turn();
+    }
+  })
+
+
+  socket.on('joinRoom', ({ username, room }) => {
+    const user = userJoin(socket.id, username, room, 0);
+    socket.join(user.room);
+
+    const data = { name: username, room: user.room, id: socket.id };
+    queue.staff.push(data);
+
+    onConnection(socket);
+    // welcome current player
+    socket.emit(
+      'message',
+      formatMessage(skribbleBot, 'Welcome to Skribble Game')
+    );
+    // broadcast to other playes that someone join
+    socket.broadcast
+      .to(user.room)
+      .emit(
+        'message',
+        formatMessage(skribbleBot, `${user.username} has joined the game`)
+      );
+    // send players info
+    socket.to(user.room).emit('roomPlayers', data);
+    // socket.to(user.room).emit('room', data);
+
+    socket.on('getall', () => {
+      console.log(queue);
+      queue.staff.forEach((staff) => {
+        socket.emit('roomPlayers', { name: staff.name, room: staff.room, id: staff.id });
+      });
+    });
+
+  });
+
+  socket.on('word', (data) => {
+    const user = getCurrentUser(socket.id);
+    console.log('OUR DATAAA', data);
+    queue.words.push(data);
+  })
+  onConnection(socket, 'room1');
+  socket.on('chatMessage', (msg) => {
+    const user = getCurrentUser(socket.id);
+
+    io.in(user.room).emit('message', formatMessage(user.username, msg, queue.words[0]));
+    let score = formatMessage(user.username, msg, queue.words[0]).score
+    if (score){
+      socket.emit('score',{score:score , user:user})
+    }
+      queue.words.pop()
+  });
+
+
+  socket.on('disconnect', () => {
+    socket.to('room1').emit('offlineStaff', { id: socket.id });
+
+    const user = userLeave(socket.id);
+
+    queue.staff = queue.staff.filter((s) => s.id !== socket.id);
+    console.log(' queue.staff', queue.staff);
+
+
+    console.log('A player disconnected');
+    players.splice(players.indexOf(socket), 1);
+    _turn--;
+    console.log("A number of players now ", players.length);
+
+    if (user) {
+      io.to(user.room).emit(
+        'message',
+        formatMessage(skribbleBot, `${user.username} has left the Game`)
+      );
+    }
+  });
+});
+
+
+function next_turn() {
+  console.log('........................................................ * ');
+
+  _turn = current_turn++ % players.length;
+  players[_turn].emit('start turn', 'A player connected');
+  console.log('........................................................ ** ');
+
+  console.log("next turn triggered ", _turn);
+  triggerTimeout();
+  players[_turn].emit('end turn', 'A player connected');
+
+  console.log('........................................................ *** ');
+
+}
+
+
+function triggerTimeout() {
+  _turn = current_turn++ % players.length;
+  console.log('........................................................ triger ');
+
+  timeOut = setTimeout(() => {
+    next_turn();
+  }, MAX_WAITING);
+}
+
+
+function resetTimeOut() {
+  if (typeof timeOut === 'object') {
+    console.log("timeout reset");
+    clearTimeout(timeOut);
+  }
+}
+
+
 server.listen(PORT, () => {
   console.log('server is running or PORT: ', PORT);
 });

@@ -5,57 +5,90 @@
     <title>Socket.IO whiteboard</title>
     <!-- <link rel="stylesheet" href="./styles/style.css" /> -->
     <link rel="stylesheet" href="./styles/canvas.css" />
+    
   </head>
   <body>
     <main class="main">
       <div class="test"></div>
 
       <section class="player-list">
-        <div>
+        <div id="rooms">
           <h2>Room Number</h2>
-          <h4>Room number 2</h4>
         </div>
-        <div>
+        <div class="playersNames">
           <h2>Players</h2>
-          <ul>
-            <li>ibrahim</li>
-            <li>raghad</li>
-            <li>omar</li>
-            <li>ziad</li>
-            <li>ruba</li>
-          </ul>
+          <ul id="players"></ul>
         </div>
-      </section>
-
-      <section class="board">
-        <canvas class="whiteboard"></canvas>
-
-        <div class="colors">
-          <div class="color black"></div>
-          <div class="color red"></div>
-          <div class="color green"></div>
-          <div class="color blue"></div>
-          <div class="color yellow"></div>
+          <div class="scores">
+          <h2>Scores</h2>
+          <ul id="scores"></ul>
         </div>
-      </section>
-
-      
-      <section class="chat">
         
+        <div class="words" >
+          <button  hidden type="button" id="word" name="word">Click to get Your Word</button>
+          <p id="words"></p>
+        </div>
+      </section>
+      <iframe
+        src="canvas.html"
+        width="100%"
+        height="480"
+        scrolling="no"
+        class="iframe-class"
+        frameborder="0"
+      >
+        <!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <title>Socket.IO whiteboard</title>
+            <link rel="stylesheet" href="./styles/canvas.css" />
+          </head>
+          <body>
+            <canvas class="whiteboard"></canvas>
+
+            <div class="colors">
+              <div class="color black"></div>
+              <div class="color red"></div>
+              <div class="color green"></div>
+              <div class="color blue"></div>
+              <div class="color yellow"></div>
+            </div>
+            <script src="/socket.io/socket.io.js"></script>
+            <script src="./js/canvas.js"></script>
+          </body>
+        </html>
+      </iframe>
+      <section class="chat">
         <div class="div-txtarea">
-          
-            <div class="txtArea"><div>lorem ipsum dolor sit amet, consectet</div></div>
+          <div class="txtArea">
+            <!-- <div>lorem ipsum dolor sit amet, consectet</div> -->
+          </div>
         </div>
         <div class="div-send-btn">
-          <input type="text" class="txt">
-          <button class="btn">Send</button>
+          <form id="chatForm">
+            <input
+              id="msg"
+              type="text"
+              class="txt"
+              placeholder="Enter your Guess"
+              required
+              autocomplete="off"
+            />
+            <button class="btn">Send</button>
+          </form>
         </div>
       </section>
-      
+
+      <button type="button" id="turn" name="button">start game</button>
 
     </main>
-    
-
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js"
+      integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./js/main.js"></script>
   </body>
