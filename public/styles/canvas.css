@@ -30,15 +30,20 @@ h4 {
   font-size: 22px;
   padding-left: 26px;
 } */
+.tophead {
+  width: 100%;
+  height: 60px;
+}
 
 /**
  * Canvas
  */
 
 .whiteboard {
-  border: 2px black solid;
+  border: 2px #34568b solid;
   height: 100%;
   width: 100%;
+  border-radius: 5px;
 }
 
 .color {
@@ -62,67 +67,74 @@ h4 {
 .color.yellow {
   background-color: yellow;
 }
+body {
+  /* display: grid; */
+  /* background-color: #98b4d4; */
+  grid-template-rows: 10% 80% 10%;
+}
 .main {
   display: grid;
-
+  height: 52em;
   grid-template-columns: 10% 15% 45% 20% 10%;
-  /* grid-template-rows: 20% 60% 20%; */
+  /* background-color: #34568b; */
+  grid-row-start: 2;
 }
 .player-list {
-  /* background: rgb(2, 1, 22) ; */
+  background-color: #98b4d4;
   grid-column-start: 2;
-  height: 600px;
-  color:#fff;
-  border-radius: 7px 0 0 7px;
-}
-#rooms{
-  /* background-color: red; */
-  background: rgb(2, 1, 22) ;
-  height: 100px;
-  color:#fff;
-  font-size: 15px;
-  padding: 2px;
-  text-align: center;
-  border-radius: 10px ;
 
+  border-radius: 7px;
 }
-.playersNames{
-  background: rgb(2, 1, 22) ;
+#rooms {
+  /* background-color: red; */
+  background: rgb(2, 1, 22);
+  height: 100px;
+  color: #fff;
+  font-size: 15px;
+  padding: 2px;
+  text-align: center;
+  border-radius: 10px;
+}
+.playersNames {
+  background: rgb(2, 1, 22);
   height: 200px;
-  color:#fff;
+  color: #fff;
   padding: 2px;
   margin: 5px;
   font-size: 15px;
   text-align: center;
-  border-radius: 10px ;
+  border-radius: 10px;
 }
-.scores{
-  background: rgb(2, 1, 22) ;
+.scores {
+  background: rgb(2, 1, 22);
   height: 200px;
-  color:#fff;
+  color: #fff;
   padding: 2px;
   margin: 5px;
   text-align: center;
-  border-radius: 10px ;
+  border-radius: 10px;
 }
-.words{
-  background: rgb(2, 1, 22) ;
+.words {
+  background: rgb(2, 1, 22);
   height: 150px;
-  color:#fff;
+  color: #fff;
   padding: 2px;
   margin: 5px;
   text-align: center;
-  border-radius: 10px ;
+  border-radius: 10px;
 }
 .board {
   background-color: white;
+  margin: 0 3px;
+  width: 99%;
+  height: 90%;
 }
 .chat {
-  background-color: rgb(2, 1, 22);
-  border-radius: 0 7px 7px 0;
+  background-color: #98b4d4;
+  border-radius: 7px;
 }
 .div-txtarea {
-  height: 600px;
+  height: 88%;
 
   /* background-color: aquamarine; */
 }
@@ -140,22 +152,54 @@ h4 {
   width: 14%;
   border-radius: 5px;
   padding: 15px 0;
-  background-color: rgb(17, 36, 78);
+  background-color: #34568b;
   color: white;
 }
 .txtArea {
-  margin: 10px;
-  width: 270px;
-  height: 580px;
+  margin: 3%;
+  width: 92%;
+  height: 100%;
   border-radius: 5px;
   background-color: #fff;
   overflow: scroll;
   padding: 5px;
 }
-
-#turn{
-  width: 50%;
+.top {
+  width: 100%;
   height: 10%;
+  border: 2px #34568b solid;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-around;
+}
+#turn {
+  padding: 15px 30px;
+  margin-top: 10%;
+  width: 100%;
+  background-color: #34568b;
+  color: #fff;
+  border-radius: 5px;
+}
+/* .test {
+  width: 100%;
+  height: 1000px;
+  background-color: rgba(75, 109, 98, 0.335);
+  z-index: 2;
+  position: fixed;
+} */
+@media (max-width: 1400px) {
+  .main {
+    height: 35em;
+  }
+  .div-txtarea {
+    height: 84%;
+  }
+}
+
+#word {
+  display: none;
+  /* float: right; */
 }
 /* .test {
   width: 100%;

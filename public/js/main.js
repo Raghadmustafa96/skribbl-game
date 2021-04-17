@@ -14,67 +14,49 @@ socket.emit('joinRoom', { username, room });
 
 socket.emit('getall');
 
+socket.on('showword', (data) => {
+  console.log(data, 'the new word =========================');
+  $('#text').show();
+});
+
 socket.on('message', (message) => {
   console.log('__msg__', message);
   outputMessage(message);
 });
 
 socket.on('room', (data) => {
-  console.log('room number', room);
   outputRoomName(data.room);
 });
 
-
-$("#turn").on("click", function (e) {
+$('#turn').on('click', (e) => {
   socket.emit('pass_turn');
-})
+});
 
 socket.on('start turn', (data) => {
-  console.log(data, 'start turn')
-  $('#word').toggle();
-
+  console.log(data, 'start turn');
+  $('.word').fadeIn();
 });
-
 
 socket.on('end turn', (data) => {
-  console.log(data, 'end turn')
-  $('#word').toggle();
+  console.log(data, 'end turn hide the word');
+  $('.word').fadeOut();
 });
-
-socket.on('score' , ({score , user}) =>{
-  outputScore(score , user)
-})
-
-function outputScore(score , user){
-console.log('marhabaaa',user);
-  let ul = document.getElementById('scores');
-  ul.innerHTML = ``;
-  let li = document.createElement('li');
-  // let playerScore = user.score++;
-  li.innerText = `${user.username} ${user.score++}`;
-  // console.log('__Name', user.username);
-  ul.appendChild(li);
-}
-
-$(document).ready(function(){
-  $("#word").click(function(){
-    let getWord = myFunction();
-    document.getElementById("words").innerHTML = getWord;
-    socket.emit('word' , getWord)
-    $("#word").hide();
-  });
-});
-
 
 // get Room and players
 socket.on('roomPlayers', (data) => {
-  console.log(data, '__data');
+  console.log(data, '__data___________');
   output(data);
 });
 
 socket.on('offlineStaff', (payload) => {
   const el = document.getElementById(payload.id);
-  el.remove();
+  if (el) {
+    console.log(el, 'ellllllllllllllllllll');
+    el.remove();
+  }
+});
+socket.on('points', (points) => {
+  console.log(points);
 });
 
 // functoins
@@ -103,25 +85,19 @@ function output(user) {
   let ul = document.getElementById('players');
   let li = document.createElement('li');
   li.id = user.id;
-  li.innerText = user.name;
-  console.log('__Name', user.name);
-  ul.appendChild(li);
-}
-
-function randomWord(word) {
-  let ul = document.getElementById('words');
-  let li = document.createElement('li');
-  li.innerText = word.randomItem;
-  console.log("-_word", word.randomItem);
+  li.innerText = user.name + '  ' + user.points + ' Points';
+  console.log('__Nmae', user.name);
   ul.appendChild(li);
 }
 
 // events
 chatForm.addEventListener('submit', (e) => {
+  console.log('start the game');
   e.preventDefault();
   // Get Guessed word
   let msg = e.target.elements.msg.value;
   msg = msg.trim();
+
   if (!msg) {
     return false;
   }
@@ -134,129 +110,130 @@ chatForm.addEventListener('submit', (e) => {
   e.target.elements.msg.focus();
 });
 
-
 function myFunction() {
-  let myArray = 
-  ["tea",
-  "stickers",
-  "candy",
-  "computer",
-  "keyboard",
-  "mouse",
-  "cup",
-  "bottle",
-  "chips",
-  "mirror",
-  "shadow",
-  "photo",
-  "horse",
-  "cat",
-  "dog",
-  "unicorn",
-  "stairs",
-  "ladder",
-  "phone",
-  "book",
-  "hand",
-  "football",
-  "tennis",
-  "snake",
-  "singer",
-  "desk",
-  "cape",
-  "hero",
-  "fish",
-  "dancer",
-  "pie",
-  "cupcake",
-  "teacher",
-  "student",
-  "star",
-  "adult",
-  "airplane",
-  "apple",
-  "pear",
-  "peach",
-  "baby",
-  "backpack",
-  "bathtub",
-  "bird",
-  "button",
-  "carrot",
-  "chess",
-  "circle",
-  "clock",
-  "clown",
-  "coffee",
-  "comet",
-  "compass",
-  "diamond",
-  "drums",
-  "ears",
-  "elephant",
-  "feather",
-  "fire",
-  "garden",
-  "gloves",
-  "grapes",
-  "hammer",
-  "highway",
-  "spider",
-  "kitchen",
-  "knife",
-  "map",
-  "maze",
-  "money",
-  "rich",
-  "needle",
-  "onion",
-  "painter",
-  "perfume",
-  "prison",
-  "potato",
-  "rainbow",
-  "record",
-  "robot",
-  "rocket",
-  "rope",
-  "sandwich",
-  "shower",
-  "spoon",
-  "sword",
-  "teeth",
-  "tongue",
-  "triangle",
-  "umbrella",
-  "werewolf",
-  "water",
-  "window",
-  "whistle",
-  "flower",
-  "boat",
-  "rain",
-  "soap",
-  "suit",
-  "egg",
-  "monkey",
-  "pizza",
-  "skirt",
-  "cactus",
-  "milk",
-  "cookie",
-  "comb",
-  "mask",
-  "stick",
-  "bat",
-  "cloud",
-  "sneeze",
-  "saw",
-  "shoe",
-  "butter",
-  "bell",
-  "sponge",
-  "train",
-  "mail",
-  "thunder",]
-  document.getElementById("words").innerHTML = myArray[Math.floor(Math.random() * myArray.length)];
+  let myArray = [
+    'tea',
+    'stickers',
+    'candy',
+    'computer',
+    'keyboard',
+    'mouse',
+    'cup',
+    'bottle',
+    'chips',
+    'mirror',
+    'shadow',
+    'photo',
+    'horse',
+    'cat',
+    'dog',
+    'unicorn',
+    'stairs',
+    'ladder',
+    'phone',
+    'book',
+    'hand',
+    'football',
+    'tennis',
+    'snake',
+    'singer',
+    'desk',
+    'cape',
+    'hero',
+    'fish',
+    'dancer',
+    'pie',
+    'cupcake',
+    'teacher',
+    'student',
+    'star',
+    'adult',
+    'airplane',
+    'apple',
+    'pear',
+    'peach',
+    'baby',
+    'backpack',
+    'bathtub',
+    'bird',
+    'button',
+    'carrot',
+    'chess',
+    'circle',
+    'clock',
+    'clown',
+    'coffee',
+    'comet',
+    'compass',
+    'diamond',
+    'drums',
+    'ears',
+    'elephant',
+    'feather',
+    'fire',
+    'garden',
+    'gloves',
+    'grapes',
+    'hammer',
+    'highway',
+    'spider',
+    'kitchen',
+    'knife',
+    'map',
+    'maze',
+    'money',
+    'rich',
+    'needle',
+    'onion',
+    'painter',
+    'perfume',
+    'prison',
+    'potato',
+    'rainbow',
+    'record',
+    'robot',
+    'rocket',
+    'rope',
+    'sandwich',
+    'shower',
+    'spoon',
+    'sword',
+    'teeth',
+    'tongue',
+    'triangle',
+    'umbrella',
+    'werewolf',
+    'water',
+    'window',
+    'whistle',
+    'flower',
+    'boat',
+    'rain',
+    'soap',
+    'suit',
+    'egg',
+    'monkey',
+    'pizza',
+    'skirt',
+    'cactus',
+    'milk',
+    'cookie',
+    'comb',
+    'mask',
+    'stick',
+    'bat',
+    'cloud',
+    'sneeze',
+    'saw',
+    'shoe',
+    'butter',
+    'bell',
+    'sponge',
+    'train',
+    'mail',
+    'thunder',
+  ];
+  document.getElementById('words').innerHTML =
+    myArray[Math.floor(Math.random() * myArray.length)];
   return myArray[Math.floor(Math.random() * myArray.length)];
 }

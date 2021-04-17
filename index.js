@@ -14,11 +14,13 @@ const {
   getRoomUsers,
 } = require('./utils/users');
 
+const words = ['test', 'money'];
 const queue = {
   staff: [],
   words: [],
 };
-
+let trn = 0;
+let allPlayers = 0;
 let players = [];
 let current_turn = 0;
 let timeOut;
@@ -37,26 +39,21 @@ function onConnection(socket, room) {
 }
 
 io.on('connection', (socket) => {
-  console.log('A player connected');
-
-  players.push(socket);
-
-  socket.on('pass_turn', function () {
-    console.log('........................................................');
-    if (players[_turn] == socket) {
-      console.log('........................................................ turn ');
-      resetTimeOut();
-      next_turn();
-    }
-  })
-
+  // console.log("A player connected", socket.id);
 
   socket.on('joinRoom', ({ username, room }) => {
-    const user = userJoin(socket.id, username, room, 0);
+    const user = userJoin(socket.id, username, room);
     socket.join(user.room);
-
-    const data = { name: username, room: user.room, id: socket.id };
+    allPlayers++;
+    const data = {
+      name: username,
+      room: user.room,
+      id: socket.id,
+      points: user.points,
+    };
     queue.staff.push(data);
+    players.push(socket);
+    console.log(players[0].id, '============players========');
 
     onConnection(socket);
     // welcome current player
@@ -76,31 +73,40 @@ io.on('connection', (socket) => {
     // socket.to(user.room).emit('room', data);
 
     socket.on('getall', () => {
-      console.log(queue);
       queue.staff.forEach((staff) => {
-        socket.emit('roomPlayers', { name: staff.name, room: staff.room, id: staff.id });
+        socket.emit('roomPlayers', {
+          name: staff.name,
+          room: staff.room,
+          id: staff.id,
+          points: staff.points,
+        });
       });
     });
-
+    socket.on('pass_turn', function () {
+      if (players[trn] == socket) {
+        players[trn].emit('showword', 'test');
+        resetTimeOut();
+        next_turn();
+      }
+    });
   });
 
-  socket.on('word', (data) => {
-    const user = getCurrentUser(socket.id);
-    console.log('OUR DATAAA', data);
-    queue.words.push(data);
-  })
   onConnection(socket, 'room1');
   socket.on('chatMessage', (msg) => {
     const user = getCurrentUser(socket.id);
-
-    io.in(user.room).emit('message', formatMessage(user.username, msg, queue.words[0]));
-    let score = formatMessage(user.username, msg, queue.words[0]).score
-    if (score){
-      socket.emit('score',{score:score , user:user})
+    if (msg === words[0]) {
+      console.log(user.points);
+      io.emit('points', user.points);
+      socket
+        .to(user.room)
+        .emit(
+          'message',
+          formatMessage(user.username, user.username + ' Found the word')
+        );
+    } else {
+      socket.to(user.room).emit('message', formatMessage(user.username, msg));
     }
-      queue.words.pop()
   });
-
 
   socket.on('disconnect', () => {
     socket.to('room1').emit('offlineStaff', { id: socket.id });
@@ -108,14 +114,10 @@ io.on('connection', (socket) => {
     const user = userLeave(socket.id);
 
     queue.staff = queue.staff.filter((s) => s.id !== socket.id);
-    console.log(' queue.staff', queue.staff);
-
 
     console.log('A player disconnected');
     players.splice(players.indexOf(socket), 1);
-    _turn--;
-    console.log("A number of players now ", players.length);
-
+    allPlayers = queue.staff.length;
     if (user) {
       io.to(user.room).emit(
         'message',
@@ -125,40 +127,45 @@ io.on('connection', (socket) => {
   });
 });
 
-
 function next_turn() {
-  console.log('........................................................ * ');
+  // _turn = current_turn++ % players.length;
 
-  _turn = current_turn++ % players.length;
-  players[_turn].emit('start turn', 'A player connected');
-  console.log('........................................................ ** ');
-
-  console.log("next turn triggered ", _turn);
+  // console.log(players[trn], "========error========");
+  players[trn].emit('start turn', 'A player connected');
   triggerTimeout();
-  players[_turn].emit('end turn', 'A player connected');
-
-  console.log('........................................................ *** ');
-
+  console.log(allPlayers, '=============', trn, players.length);
+  // if (players[trn] == undefined) {
+  //   trn = 0;
+  // }
+  trn++;
+  console.log(allPlayers, '=============', trn);
+  console.log(allPlayers, '=============', trn);
 }
-
 
 function triggerTimeout() {
   _turn = current_turn++ % players.length;
-  console.log('........................................................ triger ');
 
   timeOut = setTimeout(() => {
+    console.log('=====trn====', trn);
+    if (trn >= players.length || players[trn] == undefined) {
+      console.log('=====trn==in==', trn);
+      players[trn - 1].emit('end turn', 'A player connected');
+      trn = 0;
+      console.log('=====trn=out===', trn);
+      console.log('==Next round==');
+    } else {
+      players[trn - 1].emit('end turn', 'A player connected');
+    }
     next_turn();
   }, MAX_WAITING);
 }
 
-
 function resetTimeOut() {
   if (typeof timeOut === 'object') {
-    console.log("timeout reset");
+    console.log('timeout reset');
     clearTimeout(timeOut);
   }
 }
-
 
 server.listen(PORT, () => {
   console.log('server is running or PORT: ', PORT);
