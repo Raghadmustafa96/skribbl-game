@@ -1,97 +1,98 @@
-"use strict";
+'use strict';
 
 const options = {
-  transports: ["websocket"],
+  transports: ['websocket'],
 };
-const socket = io("localhost:3000/", options);
-const chatForm = document.getElementById("chatForm");
+const socket = io('localhost:3000/', options);
+const chatForm = document.getElementById('chatForm');
 const { username, room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
 
 // Join the Game
-socket.emit("joinRoom", { username, room });
+socket.emit('joinRoom', { username, room });
 
-socket.emit("getall");
+socket.emit('getall');
 
-socket.on("showword", (data) => {
-  console.log(data, "the new word =========================");
-  $("#text").show();
+socket.on('showword', (data) => {
+  console.log(data, 'the new word =========================');
+  $('#text').show();
 });
 
-socket.on("message", (message) => {
-  console.log("__msg__", message);
+socket.on('message', (message) => {
+  console.log('__msg__', message);
   outputMessage(message);
 });
 
-socket.on("room", (data) => {
+socket.on('room', (data) => {
   outputRoomName(data.room);
 });
 
-$("#turn").on("click", (e) => {
-  socket.emit("pass_turn");
+$('#turn').on('click', (e) => {
+  socket.emit('pass_turn');
 });
 
-socket.on("start turn", (data) => {
-  console.log(data, "start turn");
-  $(".word").fadeIn();
+socket.on('start turn', (data) => {
+  console.log(data, 'start turn');
+  $('.word').fadeIn();
 });
 
-socket.on("end turn", (data) => {
-  console.log(data, "end turn hide the word");
-  $(".word").fadeOut();
+socket.on('end turn', (data) => {
+  console.log(data, 'end turn hide the word');
+  $('.word').fadeOut();
 });
 
 // get Room and players
-socket.on("roomPlayers", (data) => {
-  console.log(data, "__data___________");
+socket.on('roomPlayers', (data) => {
+  console.log(data, '__data___________');
   output(data);
 });
 
-socket.on("offlineStaff", (payload) => {
+socket.on('offlineStaff', (payload) => {
   const el = document.getElementById(payload.id);
   if (el) {
-    console.log(el, "ellllllllllllllllllll");
+    console.log(el, 'ellllllllllllllllllll');
     el.remove();
   }
 });
-socket.on("points", (points) => {
+socket.on('points', (points) => {
   console.log(points);
 });
 
 // functoins
 function outputMessage(message) {
-  const div = document.createElement("div");
+  const div = document.createElement('div');
   // you can add class here for the div
-  const p = document.createElement("p");
+  const p = document.createElement('p');
   p.innerText = message.username;
   p.innerHTML += `<span>${message.time}</span>`;
   div.appendChild(p);
-  const para = document.createElement("p");
+  const para = document.createElement('p');
   para.innerText = message.text;
   div.appendChild(para);
-  document.querySelector(".txtArea").appendChild(div);
+  document.querySelector('.txtArea').appendChild(div);
 }
 
 function outputRoomName(room) {
-  let roomDiv = document.getElementById("rooms");
-  let h4 = document.createElement("h4");
+  let roomDiv = document.getElementById('rooms');
+  let h4 = document.createElement('h4');
   h4.innerText = room;
+  console.log('room number', room);
   roomDiv.appendChild(h4);
 }
 
 function output(user) {
-  let ul = document.getElementById("players");
-  let li = document.createElement("li");
+  let ul = document.getElementById('players');
+  let li = document.createElement('li');
   li.id = user.id;
-  li.innerText = user.name + "  " + user.points + " Points";
-  console.log("__Nmae", user.name);
+  li.innerText = user.name + '  ' + user.points + ' Points';
+  console.log('__Nmae', user.name);
   ul.appendChild(li);
 }
 
 // events
-chatForm.addEventListener("submit", (e) => {
-  console.log("start the game");
+chatForm.addEventListener('submit', (e) => {
+  console.log('start the game');
   e.preventDefault();
   // Get Guessed word
   let msg = e.target.elements.msg.value;
@@ -100,11 +101,139 @@ chatForm.addEventListener("submit", (e) => {
   if (!msg) {
     return false;
   }
-  console.log("__chatmessage___", msg);
+  console.log('__chatmessage___', msg);
   //Emit the msg to server
-  socket.emit("chatMessage", msg);
+  socket.emit('chatMessage', msg);
 
   // Clear input
-  e.target.elements.msg.value = "";
+  e.target.elements.msg.value = '';
   e.target.elements.msg.focus();
 });
+
+function myFunction() {
+  let myArray = [
+    'tea',
+    'stickers',
+    'candy',
+    'computer',
+    'keyboard',
+    'mouse',
+    'cup',
+    'bottle',
+    'chips',
+    'mirror',
+    'shadow',
+    'photo',
+    'horse',
+    'cat',
+    'dog',
+    'unicorn',
+    'stairs',
+    'ladder',
+    'phone',
+    'book',
+    'hand',
+    'football',
+    'tennis',
+    'snake',
+    'singer',
+    'desk',
+    'cape',
+    'hero',
+    'fish',
+    'dancer',
+    'pie',
+    'cupcake',
+    'teacher',
+    'student',
+    'star',
+    'adult',
+    'airplane',
+    'apple',
+    'pear',
+    'peach',
+    'baby',
+    'backpack',
+    'bathtub',
+    'bird',
+    'button',
+    'carrot',
+    'chess',
+    'circle',
+    'clock',
+    'clown',
+    'coffee',
+    'comet',
+    'compass',
+    'diamond',
+    'drums',
+    'ears',
+    'elephant',
+    'feather',
+    'fire',
+    'garden',
+    'gloves',
+    'grapes',
+    'hammer',
+    'highway',
+    'spider',
+    'kitchen',
+    'knife',
+    'map',
+    'maze',
+    'money',
+    'rich',
+    'needle',
+    'onion',
+    'painter',
+    'perfume',
+    'prison',
+    'potato',
+    'rainbow',
+    'record',
+    'robot',
+    'rocket',
+    'rope',
+    'sandwich',
+    'shower',
+    'spoon',
+    'sword',
+    'teeth',
+    'tongue',
+    'triangle',
+    'umbrella',
+    'werewolf',
+    'water',
+    'window',
+    'whistle',
+    'flower',
+    'boat',
+    'rain',
+    'soap',
+    'suit',
+    'egg',
+    'monkey',
+    'pizza',
+    'skirt',
+    'cactus',
+    'milk',
+    'cookie',
+    'comb',
+    'mask',
+    'stick',
+    'bat',
+    'cloud',
+    'sneeze',
+    'saw',
+    'shoe',
+    'butter',
+    'bell',
+    'sponge',
+    'train',
+    'mail',
+    'thunder',
+  ];
+  document.getElementById('words').innerHTML =
+    myArray[Math.floor(Math.random() * myArray.length)];
+  return myArray[Math.floor(Math.random() * myArray.length)];
+}

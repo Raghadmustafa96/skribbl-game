@@ -5,24 +5,20 @@
     <title>Socket.IO whiteboard</title>
     <!-- <link rel="stylesheet" href="./styles/style.css" /> -->
     <link rel="stylesheet" href="./styles/canvas.css" />
-    
   </head>
   <body>
     <section class="tophead"></section>
     <main class="main">
-      
-
       <section class="player-list">
         <div id="rooms">
           <h2>Room Number</h2>
         </div>
-        <div>
+        <div class="playersNames">
           <h2>Players</h2>
           <ul id="players"></ul>
         </div>
-        
       </section>
-      <section class="board" >
+      <section class="board">
         <div class="top">
           <div>
             <button type="button" id="turn" name="button">start game</button>
@@ -30,9 +26,8 @@
           <div>
             <h1 type="button" class="word" id="word" name="word">word</h1>
           </div>
-  
         </div>
-        
+
         <canvas class="whiteboard"></canvas>
 
         <div class="colors">
@@ -43,13 +38,7 @@
           <div class="color yellow"></div>
         </div>
         <!-- <iframe class="board" src="canvas.html" ></iframe> -->
-    
-    
       </section>
-      
-
-            
-
 
       <section class="chat">
         <div class="div-txtarea">
@@ -71,9 +60,6 @@
           </form>
         </div>
       </section>
-      
-
-
     </main>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js"
