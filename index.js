@@ -6,15 +6,10 @@ const http = require('http');
 const app = express();
 const server = http.createServer(app);
 const io = require('socket.io')(server);
+const words = require('./data/words.json');
 const formatMessage = require('./utils/messages');
-const {
-  userJoin,
-  getCurrentUser,
-  userLeave,
-  getRoomUsers,
-} = require('./utils/users');
+const { userJoin, getCurrentUser, userLeave } = require('./utils/users');
 
-const words = ['test', 'money'];
 const queue = {
   staff: [],
   words: [],
@@ -55,7 +50,6 @@ io.on('connection', (socket) => {
     players.push(socket);
     console.log(players[0].id, '============players========');
 
-    onConnection(socket);
     // welcome current player
     socket.emit(
       'message',
@@ -84,28 +78,36 @@ io.on('connection', (socket) => {
     });
     socket.on('pass_turn', function () {
       if (players[trn] == socket) {
-        players[trn].emit('showword', 'test');
+        // players[trn].emit('showword', 'test');
         resetTimeOut();
         next_turn();
       }
     });
   });
 
-  onConnection(socket, 'room1');
+  socket.on('drawing', (data) => {
+    io.emit('drawing', data);
+  });
   socket.on('chatMessage', (msg) => {
     const user = getCurrentUser(socket.id);
-    if (msg === words[0]) {
-      console.log(user.points);
-      io.emit('points', user.points);
-      socket
-        .to(user.room)
-        .emit(
-          'message',
-          formatMessage(user.username, user.username + ' Found the word')
-        );
-    } else {
-      socket.to(user.room).emit('message', formatMessage(user.username, msg));
-    }
+    // if (msg === words[0]) {
+    //   console.log(user.points);
+    //   io.emit('points', user.points);
+
+    //   io.in(user.room).emit(
+    //     'message',
+    //     formatMessage(user.username, user.username + ' Found the word')
+    //   );
+    // } else {
+    io.to(user.room).emit(
+      'message',
+      formatMessage(user.username, msg, queue.words[0])
+    );
+    queue.words.pop();
+  });
+  socket.on('word', (word) => {
+    const user = getCurrentUser(socket.id);
+    queue.words.push(word);
   });
 
   socket.on('disconnect', () => {
@@ -128,15 +130,9 @@ io.on('connection', (socket) => {
 });
 
 function next_turn() {
-  // _turn = current_turn++ % players.length;
-
-  // console.log(players[trn], "========error========");
   players[trn].emit('start turn', 'A player connected');
   triggerTimeout();
   console.log(allPlayers, '=============', trn, players.length);
-  // if (players[trn] == undefined) {
-  //   trn = 0;
-  // }
   trn++;
   console.log(allPlayers, '=============', trn);
   console.log(allPlayers, '=============', trn);

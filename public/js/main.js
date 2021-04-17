@@ -14,10 +14,9 @@ socket.emit('joinRoom', { username, room });
 
 socket.emit('getall');
 
-socket.on('showword', (data) => {
-  console.log(data, 'the new word =========================');
-  $('#text').show();
-});
+// socket.on('showword', (data) => {
+//   $('#text').show();
+// });
 
 socket.on('message', (message) => {
   console.log('__msg__', message);
@@ -34,6 +33,9 @@ $('#turn').on('click', (e) => {
 
 socket.on('start turn', (data) => {
   console.log(data, 'start turn');
+  let word = randomWords();
+  socket.emit('word', word);
+  $('.word').text(word);
   $('.word').fadeIn();
 });
 
@@ -44,14 +46,12 @@ socket.on('end turn', (data) => {
 
 // get Room and players
 socket.on('roomPlayers', (data) => {
-  console.log(data, '__data___________');
   output(data);
 });
 
 socket.on('offlineStaff', (payload) => {
   const el = document.getElementById(payload.id);
   if (el) {
-    console.log(el, 'ellllllllllllllllllll');
     el.remove();
   }
 });
@@ -110,7 +110,7 @@ chatForm.addEventListener('submit', (e) => {
   e.target.elements.msg.focus();
 });
 
-function myFunction() {
+function randomWords() {
   let myArray = [
     'tea',
     'stickers',
@@ -233,7 +233,7 @@ function myFunction() {
     'mail',
     'thunder',
   ];
-  document.getElementById('words').innerHTML =
-    myArray[Math.floor(Math.random() * myArray.length)];
+  // document.getElementById('words').innerHTML =
+  //   myArray[Math.floor(Math.random() * myArray.length)];
   return myArray[Math.floor(Math.random() * myArray.length)];
 }
