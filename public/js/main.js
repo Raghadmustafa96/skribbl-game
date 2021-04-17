@@ -26,6 +26,9 @@ socket.on('room', (data) => {
 $('#turn').on('click', (e) => {
   socket.emit('pass_turn');
 });
+socket.on('hide', (bool) => {
+  $('#turn').fadeOut();
+});
 
 socket.on('start turn', (data) => {
   console.log(data, 'start turn');
@@ -51,8 +54,12 @@ socket.on('offlineStaff', (payload) => {
     el.remove();
   }
 });
-socket.on('points', (points) => {
-  console.log(points);
+socket.on('point', (user) => {
+  let ul = document.getElementById('players');
+  const li = document.getElementById(user.id);
+  li.innerText = '';
+  li.innerText = user.username + '  ' + user.points + ' Points';
+  ul.appendChild(li);
 });
 
 // functoins
@@ -82,7 +89,6 @@ function output(user) {
   let li = document.createElement('li');
   li.id = user.id;
   li.innerText = user.name + '  ' + user.points + ' Points';
-  console.log('__Nmae', user.name);
   ul.appendChild(li);
 }
 
