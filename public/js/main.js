@@ -14,10 +14,6 @@ socket.emit('joinRoom', { username, room });
 
 socket.emit('getall');
 
-// socket.on('showword', (data) => {
-//   $('#text').show();
-// });
-
 socket.on('message', (message) => {
   console.log('__msg__', message);
   outputMessage(message);

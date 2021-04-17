@@ -90,15 +90,6 @@ io.on('connection', (socket) => {
   });
   socket.on('chatMessage', (msg) => {
     const user = getCurrentUser(socket.id);
-    // if (msg === words[0]) {
-    //   console.log(user.points);
-    //   io.emit('points', user.points);
-
-    //   io.in(user.room).emit(
-    //     'message',
-    //     formatMessage(user.username, user.username + ' Found the word')
-    //   );
-    // } else {
     io.to(user.room).emit(
       'message',
       formatMessage(user.username, msg, queue.words[0])
