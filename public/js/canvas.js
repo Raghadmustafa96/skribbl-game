@@ -11,6 +11,23 @@
   };
   var drawing = false;
 
+  function emitAndCanvas() {
+    socket.emit('clear');
+    clearCanvas();
+  }
+
+  function clearCanvas() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  const clear = document.getElementById('btnClear');
+
+  clear.addEventListener('click', (e) => {
+    e.preventDefault();
+    emitAndCanvas();
+  });
+  // this will handle the socket event and clears the canvas
+  socket.on('clear', clearCanvas);
+
   canvas.addEventListener('mousedown', onMouseDown, false);
   canvas.addEventListener('mouseup', onMouseUp, false);
   canvas.addEventListener('mouseout', onMouseUp, false);

@@ -6,8 +6,9 @@ const http = require("http");
 const app = express();
 const server = http.createServer(app);
 const io = require("socket.io")(server);
-const words = require("./data/words.json");
-const formatMessage = require("./utils/messages");
+// const words = require('./data/words.json');
+const { formatMessage, guessPoints } = require("./utils/messages");
+
 const { userJoin, getCurrentUser, userLeave } = require("./utils/users");
 
 const queue = {
@@ -81,6 +82,7 @@ io.on("connection", (socket) => {
         // players[trn].emit('showword', 'test');
         resetTimeOut();
         next_turn();
+        io.emit("hide", true);
       }
     });
   });
@@ -90,19 +92,15 @@ io.on("connection", (socket) => {
   });
   socket.on("chatMessage", (msg) => {
     const user = getCurrentUser(socket.id);
-    // if (msg === words[0]) {
-    //   console.log(user.points);
-    //   io.emit('points', user.points);
-
-    //   io.in(user.room).emit(
-    //     'message',
-    //     formatMessage(user.username, user.username + ' Found the word')
-    //   );
-    // } else {
-    io.to(user.room).emit(
-      "message",
-      formatMessage(user.username, msg, queue.words[0])
-    );
+    io.to(user.room).emit("message", guessPoints(user, msg, queue.words[0]));
+    if (
+      guessPoints(user, msg, queue.words[0]).text ==
+      `${user.username} guess the word`
+    ) {
+      user.points++;
+      console.log("condition work", user);
+      io.emit("point", user);
+    }
     queue.words.pop();
   });
   socket.on("word", (word) => {
