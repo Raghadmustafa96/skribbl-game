@@ -33,35 +33,50 @@
     </div>
     <img class="pen" src="./imgs/penc.gif" alt="" />
     <div class="join-container">
-      <header class="join-header">
-        <h1><i class="fas fa-smile"></i> Skribble Game</h1>
-      </header>
-      <main class="join-main">
-        <form action="game.html">
-          <div class="form-control">
-            <label for="username">Username</label>
-            <input
-              type="text"
-              name="username"
-              id="username"
-              placeholder="Enter username..."
-              required
-            />
-          </div>
-          <div class="form-control">
-            <label for="room">Room</label>
-            <select name="room" id="room">
-              <option value="room1">Room1</option>
-              <!-- <option value="room2">Room2</option>
-              <option value="room3">Room3</option>
-              <option value="room4">Room4</option>
-              <option value="room5">Room5</option>
-              <option value="room6">Room6</option> -->
-            </select>
-          </div>
-          <button type="submit" class="btn">Join Game</button>
-        </form>
+
+      <main >
+        <section class="out-main">
+          <div class="howTo">
+           <h1 class="howToPlayHeader"> How to playe the game :</h1>
+
+           <p class="ruls">
+             - Wait for your party to join the game <br>
+            - The first one join will start the game<br>
+            - Wait until your turn start and when you get the word you have to start drawing , you have a 60 second , and don't use the chat<br>
+            - The first one get 10 points will win<br>
+            - Then the game will End<br>
+          </p>
+          <button id="accept-btn" class="accept-btn">Accept</button>
+      
+      
+        <section class="join-main">
+          <h1><i class="fas fa-smile"></i> Skribble Game</h1>
+          <form action="game.html">
+            <div class="form-control">
+              <label for="username">Username</label>
+              <input
+                type="text"
+                name="username"
+                id="username"
+                placeholder="Enter username..."
+                required
+              />
+            </div>
+            
+            <button type="submit" class="btn">Join Game</button>
+          </form>
+        </section>
+        
+        
       </main>
     </div>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js"
+      integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./js/main.js"></script>
   </body>
 </html>

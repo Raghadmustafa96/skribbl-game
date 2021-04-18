@@ -3,12 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <title>Socket.IO whiteboard</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+      integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk="
+      crossorigin="anonymous"
+    />
     <link rel="stylesheet" href="./styles/canvas.css" />
   </head>
   <body>
     <canvas class="whiteboard"></canvas>
 
     <div class="colors">
+      <button class="color" type="button" id="btnClear"><i class="fas fa-trash"></i></button>
       <div class="color black"></div>
       <div class="color red"></div>
       <div class="color green"></div>

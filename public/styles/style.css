@@ -139,24 +139,29 @@ a {
   -webkit-box-shadow: 0 10px 6px -6px #777;
   -moz-box-shadow: 0 10px 6px -6px #777;
   box-shadow: 0 20px 6px -6px #777;
-  
-  
 }
 
 .join-header {
   text-align: center;
   padding: 20px;
-  background: linear-gradient(90deg,  rgba(164,196,204,1)   0%, rgb(2, 1, 22) 62%);
+  background: linear-gradient(
+    90deg,
+    rgba(164, 196, 204, 1) 0%,
+    rgb(2, 1, 22) 62%
+  );
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-
 }
 
 .join-main {
-  padding: 30px 40px;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-  background: linear-gradient(90deg,  rgba(164,196,204,1)   0%, rgb(2, 1, 22) 62%);
+  display: none;
+  padding: 40px 40px;
+  border-radius: 20px;
+  background: linear-gradient(
+    90deg,
+    rgba(164, 196, 204, 1) 0%,
+    rgb(2, 1, 22) 62%
+  );
 }
 
 .join-main p {
@@ -177,18 +182,22 @@ a {
   padding: 5px;
   height: 40px;
   width: 100%;
-}
-
-.join-main select {
-  font-size: 16px;
-  padding: 5px;
-  height: 40px;
-  width: 100%;
+  border-radius: 7px;
+  outline: 0;
 }
 
 .join-main .btn {
   margin-top: 20px;
   width: 100%;
+  padding: 10px 20px;
+  border-radius: 7px;
+}
+.join-main .btn:hover {
+  /* background-color: #5cb85c; */
+}
+.join-main h1 {
+  text-align: center;
+  padding-bottom: 35px;
 }
 
 @media (max-width: 700px) {
@@ -210,7 +219,7 @@ a {
   transform: translate(-50%, -50%);
   /* display: inline; */
 }
-.pen{
+.pen {
   width: 190px;
   float: right;
   /* top: 10%; */
@@ -219,14 +228,21 @@ a {
 
 .background-color p {
   color: #000;
-  font-family: 'Dancing Script', cursive;
+  font-family: "Dancing Script", cursive;
   font-size: 4vw;
   font-weight: bold;
   letter-spacing: 1vw;
   max-width: 700px;
   text-align: center;
   background: rgba(255, 253, 160, 1);
-  background: -webkit-linear-gradient( left, #00ffff 0%, rgb(2, 1, 22) 25%, #97b1fb 50%, #00ffff 100%) repeat;
+  background: -webkit-linear-gradient(
+      left,
+      #00ffff 0%,
+      rgb(2, 1, 22) 25%,
+      #97b1fb 50%,
+      #00ffff 100%
+    )
+    repeat;
   -webkit-background-clip: text;
   -ms-background-clip: text;
   -moz-background-clip: text;
@@ -241,10 +257,10 @@ a {
   -webkit-animation-timing-function: linear;
 }
 
-.background-color .enjoy{
+.background-color .enjoy {
   font-size: 2vw;
 }
-.container1{
+.container1 {
   padding: 1vw;
   position: absolute;
   /* top: 15%;
@@ -262,4 +278,30 @@ a {
   100% {
     background-position: -8000px -3000px;
   }
+}
+
+.howTo {
+  padding: 40px 40px;
+  border-radius: 20px;
+  background: linear-gradient(
+    90deg,
+    rgba(164, 196, 204, 1) 0%,
+    rgb(2, 1, 22) 62%
+  );
+}
+.accept-btn {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px 20px;
+  border-radius: 7px;
+  outline-color: #5cb85c00;
+  border-color: #667aff00;
+}
+.ruls {
+  margin-top: 13px;
+  font-size: 18px;
+  line-height: 35px;
+}
+.howToPlayHeader {
+  font-size: 32px;
 }
