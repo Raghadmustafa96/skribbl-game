@@ -3,7 +3,7 @@
 const options = {
   transports: ['websocket'],
 };
-const socket = io('localhost:3000/', options);
+const socket = io('skribblgame1.herokuapp.com/', options);
 const chatForm = document.getElementById('chatForm');
 const { username, room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
